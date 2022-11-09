@@ -16,14 +16,13 @@ namespace H4SymmetriskKryptering
         {
             Stopwatch watch = Stopwatch.StartNew();
             CryptoService crypto = new CryptoService(method);
-            byte[] encrypted = crypto.Encrypt(Encoding.UTF8.GetBytes("Hello World"));
-            Console.WriteLine($"Encrypted message: {Encoding.UTF8.GetString(encrypted)}");
-            byte[] decrypted = crypto.Decrypt(encrypted);
+            string encrypted = crypto.EncryptString("Hello World");
+            Console.WriteLine($"Encrypted message: {encrypted}");
+            //byte[] decrypted = crypto.Decrypt(encrypted);
+            string decrypted = crypto.DecryptString(encrypted);
             watch.Stop();
-            byte[] key = crypto.GetKey();
-            byte[] iv = crypto.GetIV();
-            Console.WriteLine($"Decrypted message: {Encoding.UTF8.GetString(decrypted)}\nKey: {Encoding.UTF8.GetString(key)}" +
-                $"\nIV:  {Encoding.UTF8.GetString(iv)}\nTime it Took: {watch.Elapsed.Milliseconds}ms\n");
+            Console.WriteLine($"Decrypted message: {decrypted}\nKey: {crypto.GetKey()}" +
+                $"\nIV:  {crypto.GetIV()}\nTime it Took: {watch.Elapsed.Milliseconds}ms\n");
         }
     }
 }

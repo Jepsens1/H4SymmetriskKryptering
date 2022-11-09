@@ -9,7 +9,7 @@ namespace H4SymmetriskKryptering
 {
     internal class CryptoService
     {
-        private SymmetricAlgorithm _symmetric;
+        SymmetricAlgorithm _symmetric;
 
         public CryptoService(string cipher)
         {
@@ -37,13 +37,13 @@ namespace H4SymmetriskKryptering
             }
 
         }
-        public byte[] GetKey()
+        public string GetKey()
         {
-            return _symmetric.Key;
+            return Convert.ToBase64String(_symmetric.Key);
         }
-        public byte[] GetIV()
+        public string GetIV()
         {
-            return _symmetric.IV;
+            return Convert.ToBase64String(_symmetric.IV);
         }
         private byte[] GenerateRandomByteArray(int size)
         {
@@ -70,6 +70,44 @@ namespace H4SymmetriskKryptering
             cs.Read(plaintext, 0, mess.Length);
             cs.Close();
             return plaintext;
+
+        }
+        public string EncryptString(string plainText)
+        {
+            byte[] array;
+            ICryptoTransform encryptor = _symmetric.CreateEncryptor(_symmetric.Key, _symmetric.IV);
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                {
+                    using (StreamWriter streamWriter = new StreamWriter(cryptoStream))
+                    {
+                        streamWriter.Write(plainText);
+                    }
+
+                    array = memoryStream.ToArray();
+                }
+            }
+
+
+            return Convert.ToBase64String(array);
+        }
+        public string DecryptString(string cipherText)
+        {
+            byte[] buffer = Convert.FromBase64String(cipherText);
+            ICryptoTransform decryptor = _symmetric.CreateDecryptor(_symmetric.Key, _symmetric.IV);
+
+            using (MemoryStream memoryStream = new MemoryStream(buffer))
+            {
+                using (CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                {
+                    using (StreamReader streamReader = new StreamReader(cryptoStream))
+                    {
+                        return streamReader.ReadToEnd();
+                    }
+                }
+            }
 
         }
     }
