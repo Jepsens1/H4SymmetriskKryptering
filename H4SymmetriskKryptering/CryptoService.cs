@@ -17,6 +17,8 @@ namespace H4SymmetriskKryptering
         }
         private void Generate(string cipher)
         {
+            //Generates object depending on which encryption method
+            //Generates random key and iv
             switch (cipher.ToLower())
             {
                 case "des":

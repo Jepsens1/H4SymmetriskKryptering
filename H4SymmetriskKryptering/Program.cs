@@ -15,12 +15,15 @@ namespace H4SymmetriskKryptering
         static void Display(string method)
         {
             Stopwatch watch = Stopwatch.StartNew();
+            //Creates CryptoServive and provide which encryption method to run
             CryptoService crypto = new CryptoService(method);
+            //Encrypt message
             string encrypted = crypto.EncryptString("Hello World");
             Console.WriteLine($"Encrypted message: {encrypted}");
-            //byte[] decrypted = crypto.Decrypt(encrypted);
+            //Decrypt message
             string decrypted = crypto.DecryptString(encrypted);
             watch.Stop();
+            //Display
             Console.WriteLine($"Decrypted message: {decrypted}\nKey: {crypto.GetKey()}" +
                 $"\nIV:  {crypto.GetIV()}\nTime it Took: {watch.Elapsed.Milliseconds}ms\n");
         }
