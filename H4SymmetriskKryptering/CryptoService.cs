@@ -54,24 +54,6 @@ namespace H4SymmetriskKryptering
                 return buffer;
             }
         }
-        public byte[] Encrypt(byte[] mess)
-        {
-            MemoryStream ms = new MemoryStream();
-            CryptoStream cs = new CryptoStream(ms, _symmetric.CreateEncryptor(), CryptoStreamMode.Write);
-            cs.Write(mess, 0, mess.Length);
-            cs.Close();
-            return ms.ToArray();
-        }
-        public byte[] Decrypt(byte[] mess)
-        {
-            byte[] plaintext = new byte[mess.Length];
-            MemoryStream ms = new MemoryStream(mess);
-            CryptoStream cs = new CryptoStream(ms, _symmetric.CreateDecryptor(), CryptoStreamMode.Read);
-            cs.Read(plaintext, 0, mess.Length);
-            cs.Close();
-            return plaintext;
-
-        }
         public string EncryptString(string plainText)
         {
             byte[] array;
